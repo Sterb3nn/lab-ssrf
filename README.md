@@ -1,4 +1,4 @@
-# Passos instalar o lab:
+# Instalar o lab:
 
 1. `git clone git@github.com:Sterb3nn/lab-ssrf.git`
 2. `cd lab-ssrf/`
