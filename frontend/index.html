@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Enviar URL</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Enviar URL</h1>
+        <form id="urlForm">
+            <label for="urlInput">URL:</label>
+            <input type="text" id="urlInput" name="url" required>
+            <button type="submit">Enviar</button>
+        </form>
+
+        <div id="responseContainer"></div>
+    </div>
+
+    <script>
+        // JavaScript do frontend aqui...
+    </script>
+</body>
+</html>
+
+
+    <script>
+        document.getElementById("urlForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const url = document.getElementById("urlInput").value;
+            sendDataToServer(url);
+        });
+
+        function sendDataToServer(url) {
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "http://localhost:8081/get-url", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            document.getElementById("responseContainer").innerText = "";
+            xhr.timeout = 1000;
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        //document.getElementById("responseContainer").innerText = "Server Response:";
+                        // Criar o elemento iframe somente se a resposta for 200
+                        const responseContainer = document.getElementById("responseContainer");
+                        const iframe = document.createElement("iframe");
+                        iframe.width = "100%";
+                        iframe.height = "400";
+                        iframe.frameBorder = "0";
+                        iframe.srcdoc = xhr.responseText;
+                        responseContainer.appendChild(iframe);
+                    } else {
+                        // Exibir a mensagem de erro na div com o ID "responseContainer"
+                        document.getElementById("responseContainer").style.color = "black";
+                        document.getElementById("responseContainer").innerText = "Server Response: Erro na solicitação.";
+                    }
+                }
+            };
+            xhr.ontimeout = function() {
+            document.getElementById("response").innerText = "Server Response: TIMEOUT";
+        };
+            xhr.send("url=" + encodeURIComponent(url));
+        }
+    </script>
+</body>
+</html>
